@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, Layers, Mail } from "lucide-react";
 import mqLogo from "@/assets/mq-logo.png";
 import { useContent } from "@/store/content";
+import { AdminTrigger } from "@/components/AdminPanel";
 
 export const Route = createFileRoute("/workspace")({
   component: WorkspacePage,
@@ -171,6 +172,7 @@ function WorkspacePage() {
           </div>
         </div>
       </footer>
+      <AdminTrigger />
     </main>
   );
 }
