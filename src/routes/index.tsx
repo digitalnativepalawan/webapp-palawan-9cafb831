@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ArrowUpRight, X, Sun, Moon, Github, Instagram, Linkedin, Twitter, Triangle, Mail, Globe, Building2 } from "lucide-react";
 import { useContent, type BlogPost, type PortfolioItem } from "@/store/content";
 import HermesWorkstation from "@/components/HermesWorkstation";
+import { AdminTrigger } from "@/components/AdminPanel";
 import hero from "@/assets/hero.jpg";
 import mqLogo from "@/assets/mq-logo.png";
 import b1 from "@/assets/blog-1.jpg";
@@ -292,6 +293,7 @@ function Index() {
           ))}
         </div>
       </footer>
+      <AdminTrigger />
     </main>
   );
 }

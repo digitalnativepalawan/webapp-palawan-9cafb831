@@ -10,6 +10,7 @@ import mqLogo from "@/assets/mq-logo.png";
 import { chatWithAgent } from "@/lib/agent.functions";
 import { useContent } from "@/store/content";
 import type { PricingTier } from "@/store/content";
+import { AdminTrigger } from "@/components/AdminPanel";
 
 export const Route = createFileRoute("/agents")({
   component: AgentsPage,
@@ -795,6 +796,7 @@ function AgentsPage() {
       <WhySection />
       <FinalCta />
       <AgentsFooter />
+      <AdminTrigger />
     </main>
   );
 }

@@ -6,6 +6,7 @@ import {
   Bell, Settings, Plus, Filter, Search, ChevronRight, Clock,
   Users, DollarSign, Wifi, Shield, Zap,
 } from "lucide-react";
+import { AdminTrigger } from "@/components/AdminPanel";
 
 export const Route = createFileRoute("/dashboard")({
   component: DashboardPage,
@@ -300,6 +301,7 @@ function DashboardPage() {
           </div>
         </div>
       </footer>
+      <AdminTrigger />
     </main>
   );
 }
