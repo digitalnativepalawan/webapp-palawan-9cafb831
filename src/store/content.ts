@@ -47,6 +47,16 @@ export type PortfolioItem = {
   url: string;
 };
 
+export type WorkProject = {
+  id: string;
+  image: string;
+  title: string;
+  description: string;
+  status: string;
+  tag: string;
+  url?: string;
+};
+
 export type SocialLink = {
   id: string;
   platform: string; // github | twitter | x | instagram | linkedin | facebook | youtube | tiktok | mail | website | triangle
@@ -141,6 +151,7 @@ export type Content = {
   pricingTitle: string;
   pricingSubtitle: string;
   pricing: PricingTier[];
+  workProjects: WorkProject[];
 };
 
 const defaults: Content = {
