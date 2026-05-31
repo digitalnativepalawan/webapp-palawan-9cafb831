@@ -124,7 +124,7 @@ function ImageField({
 export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey: string }) {
   const { content, save, saving, reset } = useContent();
   const [c, setC] = useState<Content>(content);
-  const [tab, setTab] = useState<"header" | "hero" | "blog" | "portfolio" | "footer" | "socials" | "legal" | "pricing">("header");
+  const [tab, setTab] = useState<"header" | "hero" | "blog" | "portfolio" | "workspace" | "footer" | "socials" | "legal" | "pricing">("header");
   const [err, setErr] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const lastSavedJson = useRef(JSON.stringify(content));
@@ -225,7 +225,7 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
         {!err && syncing && <div className="label text-ink-dim mb-3">SYNCING TO BACKEND...</div>}
 
         <div className="flex gap-1 mb-4 border-b border-line">
-          {(["header", "hero", "blog", "portfolio", "pricing", "footer", "socials", "legal"] as const).map((t) => (
+          {(["header", "hero", "blog", "portfolio", "workspace", "pricing", "footer", "socials", "legal"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
@@ -551,6 +551,113 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
           </div>
         )}
 
+        {tab === "workspace" && (
+          <div className="space-y-4">
+            <div className="label text-ink-dim">
+              Working projects shown on the /workspace page. Upload an image, add a title and description for each.
+            </div>
+            {(c.workProjects || []).map((item, i) => (
+              <div key={item.id} className="border border-line p-3 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="label">{String(i + 1).padStart(2, "0")} — {item.title || "UNTITLED"}</span>
+                  <div className="flex gap-2">
+                    <button
+                      disabled={i === 0}
+                      onClick={() => {
+                        const arr = [...c.workProjects];
+                        [arr[i - 1], arr[i]] = [arr[i], arr[i - 1]];
+                        void commit({ ...c, workProjects: arr });
+                      }}
+                      className="label disabled:opacity-30"
+                    >↑</button>
+                    <button
+                      disabled={i === c.workProjects.length - 1}
+                      onClick={() => {
+                        const arr = [...c.workProjects];
+                        [arr[i + 1], arr[i]] = [arr[i], arr[i + 1]];
+                        void commit({ ...c, workProjects: arr });
+                      }}
+                      className="label disabled:opacity-30"
+                    >↓</button>
+                    <button
+                      onClick={() => {
+                        const next = { ...c, workProjects: c.workProjects.filter((_, j) => j !== i) };
+                        void commit(next, item.image);
+                      }}
+                      className="label text-accent"
+                    >DELETE</button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <ImageField
+                    label="image"
+                    value={item.image}
+                    passkey={passkey}
+                    onChange={(nv) =>
+                      commit(
+                        { ...c, workProjects: c.workProjects.map((p, j) => (j === i ? { ...p, image: nv } : p)) },
+                        item.image,
+                      )
+                    }
+                    onDelete={() =>
+                      commit(
+                        { ...c, workProjects: c.workProjects.map((p, j) => (j === i ? { ...p, image: "" } : p)) },
+                        item.image,
+                      )
+                    }
+                  />
+                  {(["title", "tag", "status", "url"] as const).map((k) => (
+                    <Field
+                      key={k}
+                      label={k}
+                      value={(item[k] as string) || ""}
+                      onChange={(nv) =>
+                        upd(
+                          "workProjects",
+                          c.workProjects.map((p, j) => (j === i ? { ...p, [k]: nv } : p)),
+                        )
+                      }
+                    />
+                  ))}
+                  <div className="col-span-2">
+                    <Field
+                      area
+                      label="description"
+                      value={item.description}
+                      onChange={(nv) =>
+                        upd(
+                          "workProjects",
+                          c.workProjects.map((p, j) => (j === i ? { ...p, description: nv } : p)),
+                        )
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+            <button
+              onClick={() => {
+                const next = {
+                  ...c,
+                  workProjects: [
+                    ...(c.workProjects || []),
+                    {
+                      id: String(Date.now()),
+                      image: "",
+                      title: "NEW PROJECT",
+                      description: "",
+                      status: "BUILDING",
+                      tag: "WORK",
+                      url: "",
+                    },
+                  ],
+                };
+                void commit(next);
+              }}
+              className="label px-3 py-2 border border-line hover:border-accent"
+            >+ ADD PROJECT</button>
+          </div>
+        )}
         {tab === "pricing" && (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-3">
