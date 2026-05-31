@@ -293,6 +293,7 @@ function Index() {
           ))}
         </div>
       </footer>
+      <AdminTrigger />
     </main>
   );
 }
