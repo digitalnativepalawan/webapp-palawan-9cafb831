@@ -4,6 +4,7 @@ import { ArrowUpRight, X, Sun, Moon, Github, Instagram, Linkedin, Twitter, Trian
 import { useContent, type BlogPost, type PortfolioItem } from "@/store/content";
 import HermesWorkstation from "@/components/HermesWorkstation";
 import hero from "@/assets/hero.jpg";
+import mqLogo from "@/assets/mq-logo.png";
 import b1 from "@/assets/blog-1.jpg";
 import b2 from "@/assets/blog-2.jpg";
 import b3 from "@/assets/blog-3.jpg";
@@ -57,7 +58,7 @@ function Index() {
           <button onClick={toggleTheme} aria-label="Toggle theme" className="border border-line p-1.5 text-ink-dim hover:text-accent hover:border-accent transition-colors">
             {theme === "dark" ? <Sun className="w-3 h-3" /> : <Moon className="w-3 h-3" />}
           </button>
-          <img src="/assets/mq-logo.png" alt="MQ" className="w-12 h-auto" />
+          <img src={mqLogo} alt="MQ" className="w-12 h-auto" />
         </div>
       </header>
 
@@ -84,7 +85,7 @@ function Index() {
               </div>
             </div>
             <div className="absolute inset-0 flex flex-col items-center justify-center px-4 text-center">
-              <img src="/assets/mq-logo.png" alt="MQ" className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mb-4 md:mb-6" />
+              <img src={mqLogo} alt="MQ" className="w-24 sm:w-32 md:w-40 lg:w-48 h-auto mb-4 md:mb-6" />
               <div className="label text-[9px] md:text-[10px] mb-2 md:mb-3">{content.hero.overline}</div>
               <h1 className="hero-title font-serif text-4xl xs:text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-ink leading-[0.95]">{content.hero.title}</h1>
               <div className="mt-4 md:mt-6 text-[9px] md:text-[10px] uppercase tracking-[0.22em] text-ink-dim">
