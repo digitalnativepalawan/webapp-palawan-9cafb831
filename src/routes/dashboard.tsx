@@ -301,6 +301,7 @@ function DashboardPage() {
           </div>
         </div>
       </footer>
+      <AdminTrigger />
     </main>
   );
 }
