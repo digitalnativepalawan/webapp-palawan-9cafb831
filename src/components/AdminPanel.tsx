@@ -551,9 +551,6 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
           </div>
         )}
 
-        {tab === "pricing" && (
-          null
-        )}
         {tab === "workspace" && (
           <div className="space-y-4">
             <div className="label text-ink-dim">
