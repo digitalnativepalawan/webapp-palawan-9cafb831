@@ -319,6 +319,44 @@ const defaults: Content = {
       buttonLink: "#contact-form",
     },
   ],
+  workProjects: [
+    {
+      id: "wp1",
+      image: p1,
+      title: "NOMADS.ONE",
+      description: "Global community network for digital nomads, creators and remote professionals. Currently iterating on the onboarding flow and profile system.",
+      status: "LIVE",
+      tag: "COMMUNITY",
+      url: "https://nomads.one",
+    },
+    {
+      id: "wp2",
+      image: p2,
+      title: "MERQATO.APP",
+      description: "All-in-one hospitality operating system for resorts — reservations, housekeeping, revenue, maintenance and guest services in one synced backoffice.",
+      status: "LIVE",
+      tag: "OPERATIONS",
+      url: "https://merqato.app",
+    },
+    {
+      id: "wp3",
+      image: p3,
+      title: "SANVICENTE.PH",
+      description: "Interactive map and business directory of San Vicente, Palawan. Discovery platform for the local ecosystem.",
+      status: "LIVE",
+      tag: "DIRECTORY",
+      url: "https://sanvicente.ph",
+    },
+    {
+      id: "wp4",
+      image: p4,
+      title: "HERMES WORKSPACE",
+      description: "The AI agent workspace you are looking at right now. Built to give merQato a transparent live view of what Hermes is shipping.",
+      status: "BUILDING",
+      tag: "INTERNAL",
+      url: "",
+    },
+  ],
 };
 
 type Store = {
