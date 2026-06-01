@@ -166,9 +166,22 @@ function Index() {
               <div key={item.id} className="grid grid-cols-12 gap-x-4 gap-y-2 items-start py-4 border-b border-line text-[11px] uppercase tracking-[0.1em]">
                 <div className="col-span-1 text-ink-mute pt-1">{item.index}</div>
                 <div className="col-span-2 lg:col-span-1">
-                  <div className="w-full aspect-[4/3] max-w-[88px] overflow-hidden border border-line-soft">
-                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" loading="lazy" />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const imgs = [item.image, ...(item.images || [])].filter(Boolean);
+                      if (imgs.length) setGalleryItem(item);
+                    }}
+                    className="block w-full aspect-[4/3] max-w-[88px] overflow-hidden border border-line-soft hover:border-accent transition-colors group relative"
+                    aria-label={`Open ${item.name} gallery`}
+                  >
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform" loading="lazy" />
+                    {((item.images?.length || 0) > 0) && (
+                      <span className="absolute bottom-0 right-0 bg-background/80 text-accent text-[8px] px-1 leading-none py-0.5 border-l border-t border-line">
+                        +{item.images!.length}
+                      </span>
+                    )}
+                  </button>
                 </div>
                 <div className="col-span-9 lg:col-span-2">
                   <div className="text-ink">{item.name}</div>
