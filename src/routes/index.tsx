@@ -4,6 +4,7 @@ import { ArrowUpRight, X, Sun, Moon, Github, Instagram, Linkedin, Twitter, Trian
 import { useContent, type BlogPost, type PortfolioItem } from "@/store/content";
 import HermesWorkstation from "@/components/HermesWorkstation";
 import { AdminTrigger } from "@/components/AdminPanel";
+import { PortfolioGallery } from "@/components/PortfolioGallery";
 import hero from "@/assets/hero.jpg";
 import mqLogo from "@/assets/mq-logo.png";
 import b1 from "@/assets/blog-1.jpg";
@@ -25,6 +26,7 @@ function Dot({ className = "" }: { className?: string }) {
 function Index() {
   const { content } = useContent();
   const [activeBlog, setActiveBlog] = useState<BlogPost | null>(null);
+  const [galleryItem, setGalleryItem] = useState<PortfolioItem | null>(null);
   const theme = useContent((s) => s.theme);
   const toggleTheme = useContent((s) => s.toggleTheme);
 
