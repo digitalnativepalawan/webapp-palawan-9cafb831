@@ -927,6 +927,16 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
                       }
                     />
                   </div>
+                  <WorkspaceMediaManager
+                    item={item}
+                    passkey={passkey}
+                    onChange={(media, deletedUrl) =>
+                      commit(
+                        { ...c, workProjects: c.workProjects.map((p, j) => (j === i ? { ...p, media } : p)) },
+                        deletedUrl,
+                      )
+                    }
+                  />
                 </div>
               </div>
             ))}
