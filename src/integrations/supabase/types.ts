@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      project_comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          project_id: string
+          rating: number
+        }
+        Insert: {
+          author_name: string
+          body: string
+          created_at?: string
+          id?: string
+          project_id: string
+          rating: number
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          project_id?: string
+          rating?: number
+        }
+        Relationships: []
+      }
       site_content: {
         Row: {
           content: Json

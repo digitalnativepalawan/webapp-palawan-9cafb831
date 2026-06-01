@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, Layers, Mail } from "lucide-react";
+import { ArrowUpRight, Layers, Mail, PlayCircle, Images } from "lucide-react";
 import mqLogo from "@/assets/mq-logo.png";
-import { useContent } from "@/store/content";
+import { useContent, type WorkProject, type WorkMedia } from "@/store/content";
 import { AdminTrigger } from "@/components/AdminPanel";
+import { WorkspaceMediaGallery } from "@/components/WorkspaceMediaGallery";
+import { ProjectComments } from "@/components/ProjectComments";
 
 export const Route = createFileRoute("/workspace")({
   component: WorkspacePage,
@@ -55,6 +58,13 @@ function statusTone(status: string) {
 function WorkspacePage() {
   const { content } = useContent();
   const projects = content.workProjects || [];
+  const [openMedia, setOpenMedia] = useState<{ project: WorkProject; index: number } | null>(null);
+
+  const mediaFor = (p: WorkProject): WorkMedia[] => {
+    const list = (p.media || []).filter((m) => m && m.url);
+    if (list.length > 0) return list;
+    return p.image ? [{ id: "main", kind: "image", url: p.image }] : [];
+  };
 
   return (
     <main className="min-h-screen bg-background text-ink">
@@ -96,20 +106,37 @@ function WorkspacePage() {
             {projects.map((p, i) => (
               <article key={p.id} className="corner border border-line overflow-hidden flex flex-col group hover:border-accent/40 transition-colors">
                 <div className="c1" /><div className="c2" />
-                <div className="aspect-[16/10] bg-surface overflow-hidden border-b border-line">
-                  {p.image ? (
-                    <img
-                      src={p.image}
-                      alt={p.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-ink-mute text-[10px] uppercase tracking-[0.14em]">
-                      No image
-                    </div>
-                  )}
-                </div>
+                {(() => {
+                  const media = mediaFor(p);
+                  const hasVideo = media.some((m) => m.kind !== "image");
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => media.length && setOpenMedia({ project: p, index: 0 })}
+                      className="aspect-[16/10] bg-surface overflow-hidden border-b border-line relative block w-full text-left"
+                      aria-label={`Open ${p.title} gallery`}
+                    >
+                      {p.image ? (
+                        <img
+                          src={p.image}
+                          alt={p.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-700"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-ink-mute text-[10px] uppercase tracking-[0.14em]">
+                          No image
+                        </div>
+                      )}
+                      {media.length > 0 && (
+                        <div className="absolute top-2 right-2 flex items-center gap-1 border border-line bg-background/70 px-2 py-1 text-[9px] uppercase tracking-[0.14em] text-accent">
+                          {hasVideo ? <PlayCircle className="w-3 h-3" /> : <Images className="w-3 h-3" />}
+                          {media.length.toString().padStart(2, "0")}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })()}
                 <div className="p-5 flex flex-col gap-3 flex-1">
                   <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.14em]">
                     <span className="text-ink-mute">{String(i + 1).padStart(2, "0")} · {p.tag || "WORK"}</span>
@@ -130,6 +157,7 @@ function WorkspacePage() {
                     </a>
                   )}
                 </div>
+                <ProjectComments projectId={p.id} />
               </article>
             ))}
           </div>
@@ -173,6 +201,14 @@ function WorkspacePage() {
         </div>
       </footer>
       <AdminTrigger />
+      {openMedia && (
+        <WorkspaceMediaGallery
+          media={mediaFor(openMedia.project)}
+          title={openMedia.project.title}
+          startIndex={openMedia.index}
+          onClose={() => setOpenMedia(null)}
+        />
+      )}
     </main>
   );
 }
