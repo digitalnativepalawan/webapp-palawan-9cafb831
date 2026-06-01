@@ -123,6 +123,122 @@ function ImageField({
   );
 }
 
+function GalleryImages({
+  item,
+  passkey,
+  onChange,
+}: {
+  item: { id: string; images?: string[] };
+  passkey: string;
+  onChange: (images: string[], deletedUrl?: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const images = item.images || [];
+  const remaining = MAX_GALLERY - images.length;
+
+  const addFiles = async (files: FileList | null) => {
+    if (!files || !files.length) return;
+    const toUpload = Array.from(files).slice(0, remaining);
+    setBusy(true);
+    try {
+      const urls: string[] = [];
+      for (const f of toUpload) {
+        urls.push(await uploadFile(f, passkey));
+      }
+      onChange([...images, ...urls]);
+    } catch (e) {
+      alert("Upload failed: " + (e instanceof Error ? e.message : "unknown"));
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return (
+    <div className="col-span-2 border border-line-soft p-2 space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="label">
+          gallery images ({images.length}/{MAX_GALLERY})
+        </span>
+        {busy && <span className="label text-ink-dim">UPLOADING...</span>}
+      </div>
+      <p className="text-[10px] text-ink-mute leading-snug">
+        Up to {MAX_GALLERY} extra screenshots shown in the popup carousel when a visitor clicks the main image.
+      </p>
+      {images.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {images.map((url, gi) => (
+            <div key={url + gi} className="relative w-16 h-16 border border-line">
+              <img src={url} alt="" className="w-full h-full object-cover" />
+              <div className="absolute top-0 left-0 right-0 flex justify-between text-[9px] bg-background/70">
+                <div className="flex">
+                  <button
+                    type="button"
+                    disabled={gi === 0 || busy}
+                    onClick={() => {
+                      const arr = [...images];
+                      [arr[gi - 1], arr[gi]] = [arr[gi], arr[gi - 1]];
+                      onChange(arr);
+                    }}
+                    className="px-1 text-ink-dim hover:text-accent disabled:opacity-30"
+                  >
+                    ←
+                  </button>
+                  <button
+                    type="button"
+                    disabled={gi === images.length - 1 || busy}
+                    onClick={() => {
+                      const arr = [...images];
+                      [arr[gi + 1], arr[gi]] = [arr[gi], arr[gi + 1]];
+                      onChange(arr);
+                    }}
+                    className="px-1 text-ink-dim hover:text-accent disabled:opacity-30"
+                  >
+                    →
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => {
+                    if (!window.confirm("Remove this image?")) return;
+                    onChange(images.filter((_, j) => j !== gi), url);
+                  }}
+                  className="px-1 text-accent"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {remaining > 0 ? (
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          disabled={busy}
+          onChange={(e) => {
+            const input = e.currentTarget;
+            void addFiles(input.files).finally(() => {
+              if (input && input.isConnected) {
+                try {
+                  input.value = "";
+                } catch {
+                  /* ignore */
+                }
+              }
+            });
+          }}
+          className="text-[10px] text-ink-dim"
+        />
+      ) : (
+        <div className="label text-ink-mute">Gallery full — remove one to add more.</div>
+      )}
+    </div>
+  );
+}
+
 export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey: string }) {
   const { content, save, saving, reset } = useContent();
   const [c, setC] = useState<Content>(content);
