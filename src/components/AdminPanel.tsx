@@ -4,6 +4,7 @@ import { defaultContent, useContent, type Content } from "@/store/content";
 import { deleteMedia, uploadMedia } from "@/lib/content.functions";
 
 const MAX_GALLERY = 7;
+const MAX_WORKSPACE_MEDIA = 10;
 
 function fileToDataUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -232,6 +233,172 @@ function GalleryImages({
           }}
           className="text-[10px] text-ink-dim"
         />
+      ) : (
+        <div className="label text-ink-mute">Gallery full — remove one to add more.</div>
+      )}
+    </div>
+  );
+}
+
+function WorkspaceMediaManager({
+  item,
+  passkey,
+  onChange,
+}: {
+  item: { id: string; media?: { id: string; kind: "image" | "video" | "youtube"; url: string }[] };
+  passkey: string;
+  onChange: (media: { id: string; kind: "image" | "video" | "youtube"; url: string }[], deletedUrl?: string) => void;
+}) {
+  const [busy, setBusy] = useState(false);
+  const [yt, setYt] = useState("");
+  const media = item.media || [];
+  const remaining = MAX_WORKSPACE_MEDIA - media.length;
+
+  const addImages = async (files: FileList | null) => {
+    if (!files || !files.length) return;
+    const list = Array.from(files).slice(0, remaining);
+    setBusy(true);
+    try {
+      const next = [...media];
+      for (const f of list) {
+        const url = await uploadFile(f, passkey);
+        next.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, kind: "image", url });
+      }
+      onChange(next);
+    } catch (e) {
+      alert("Upload failed: " + (e instanceof Error ? e.message : "unknown"));
+    } finally { setBusy(false); }
+  };
+
+  const addVideos = async (files: FileList | null) => {
+    if (!files || !files.length) return;
+    const list = Array.from(files).slice(0, remaining);
+    setBusy(true);
+    try {
+      const next = [...media];
+      for (const f of list) {
+        const url = await uploadFile(f, passkey);
+        next.push({ id: `${Date.now()}-${Math.random().toString(36).slice(2, 6)}`, kind: "video", url });
+      }
+      onChange(next);
+    } catch (e) {
+      alert("Upload failed: " + (e instanceof Error ? e.message : "unknown"));
+    } finally { setBusy(false); }
+  };
+
+  const addYoutube = () => {
+    const u = yt.trim();
+    if (!u) return;
+    if (remaining <= 0) return;
+    onChange([...media, { id: `${Date.now()}`, kind: "youtube", url: u }]);
+    setYt("");
+  };
+
+  return (
+    <div className="col-span-2 border border-line-soft p-2 space-y-2">
+      <div className="flex items-center justify-between">
+        <span className="label">media — images & videos ({media.length}/{MAX_WORKSPACE_MEDIA})</span>
+        {busy && <span className="label text-ink-dim">UPLOADING...</span>}
+      </div>
+      <p className="text-[10px] text-ink-mute leading-snug">
+        Visitors click the project image to open this gallery. Up to {MAX_WORKSPACE_MEDIA} items: images, video files, or YouTube links.
+      </p>
+      {media.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {media.map((m, mi) => (
+            <div key={m.id || mi} className="relative w-20 h-20 border border-line bg-surface">
+              {m.kind === "image" ? (
+                <img src={m.url} alt="" className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-[10px] uppercase tracking-[0.14em] text-accent">
+                  {m.kind === "youtube" ? "YT" : "VID"}
+                </div>
+              )}
+              <div className="absolute top-0 left-0 right-0 flex justify-between text-[9px] bg-background/70">
+                <div className="flex">
+                  <button
+                    type="button"
+                    disabled={mi === 0 || busy}
+                    onClick={() => {
+                      const arr = [...media];
+                      [arr[mi - 1], arr[mi]] = [arr[mi], arr[mi - 1]];
+                      onChange(arr);
+                    }}
+                    className="px-1 text-ink-dim hover:text-accent disabled:opacity-30"
+                  >←</button>
+                  <button
+                    type="button"
+                    disabled={mi === media.length - 1 || busy}
+                    onClick={() => {
+                      const arr = [...media];
+                      [arr[mi + 1], arr[mi]] = [arr[mi], arr[mi + 1]];
+                      onChange(arr);
+                    }}
+                    className="px-1 text-ink-dim hover:text-accent disabled:opacity-30"
+                  >→</button>
+                </div>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => {
+                    if (!window.confirm("Remove this media item?")) return;
+                    const removed = media[mi];
+                    const isStored = removed.kind !== "youtube";
+                    onChange(media.filter((_, j) => j !== mi), isStored ? removed.url : undefined);
+                  }}
+                  className="px-1 text-accent"
+                >✕</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+      {remaining > 0 ? (
+        <div className="space-y-2">
+          <div className="flex flex-wrap items-center gap-3">
+            <label className="label text-ink-dim flex items-center gap-1">
+              <span>+ IMAGES</span>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                disabled={busy}
+                onChange={(e) => {
+                  const input = e.currentTarget;
+                  void addImages(input.files).finally(() => {
+                    if (input && input.isConnected) { try { input.value = ""; } catch { /* ignore */ } }
+                  });
+                }}
+                className="text-[10px] text-ink-dim"
+              />
+            </label>
+            <label className="label text-ink-dim flex items-center gap-1">
+              <span>+ VIDEO FILE</span>
+              <input
+                type="file"
+                accept="video/*"
+                multiple
+                disabled={busy}
+                onChange={(e) => {
+                  const input = e.currentTarget;
+                  void addVideos(input.files).finally(() => {
+                    if (input && input.isConnected) { try { input.value = ""; } catch { /* ignore */ } }
+                  });
+                }}
+                className="text-[10px] text-ink-dim"
+              />
+            </label>
+          </div>
+          <div className="flex gap-2 items-center">
+            <input
+              value={yt}
+              onChange={(e) => setYt(e.target.value)}
+              placeholder="https://youtube.com/watch?v=…"
+              className="flex-1 bg-background border border-line p-2 text-ink font-mono text-[11px] focus:border-accent outline-none"
+            />
+            <button type="button" onClick={addYoutube} className="label px-3 py-2 border border-line hover:border-accent">+ YOUTUBE</button>
+          </div>
+        </div>
       ) : (
         <div className="label text-ink-mute">Gallery full — remove one to add more.</div>
       )}
