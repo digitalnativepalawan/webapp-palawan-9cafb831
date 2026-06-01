@@ -309,6 +309,13 @@ function Index() {
         </div>
       </footer>
       <AdminTrigger />
+      {galleryItem && (
+        <PortfolioGallery
+          title={galleryItem.name}
+          images={[galleryItem.image, ...(galleryItem.images || [])].filter(Boolean)}
+          onClose={() => setGalleryItem(null)}
+        />
+      )}
     </main>
   );
 }
