@@ -471,6 +471,16 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
                       )
                     }
                   />
+                  <GalleryImages
+                    item={item}
+                    passkey={passkey}
+                    onChange={(images, deletedUrl) =>
+                      commit(
+                        { ...c, portfolio: c.portfolio.map((p, j) => (j === i ? { ...p, images } : p)) },
+                        deletedUrl,
+                      )
+                    }
+                  />
                   {(
                     [
                       "index",
