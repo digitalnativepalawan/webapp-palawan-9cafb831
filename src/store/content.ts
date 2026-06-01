@@ -56,6 +56,13 @@ export type WorkProject = {
   status: string;
   tag: string;
   url?: string;
+  media?: WorkMedia[];
+};
+
+export type WorkMedia = {
+  id: string;
+  kind: "image" | "video" | "youtube";
+  url: string;
 };
 
 export type SocialLink = {
