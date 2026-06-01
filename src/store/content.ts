@@ -32,6 +32,7 @@ export type PortfolioItem = {
   id: string;
   index: string;
   image: string;
+  images?: string[];
   name: string;
   category: string;
   tag: string;
