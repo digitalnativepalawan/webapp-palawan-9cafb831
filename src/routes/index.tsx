@@ -31,7 +31,7 @@ function Index() {
   const toggleTheme = useContent((s) => s.toggleTheme);
 
   return (
-    <main className="min-h-screen bg-background text-ink">
+    <main className="min-h-screen bg-background text-ink overflow-x-hidden">
       {/* Header */}
       <header className="grid grid-cols-12 gap-3 md:gap-4 px-4 md:px-6 lg:px-10 pt-5 md:pt-6 pb-4 text-[10px] uppercase tracking-[0.14em]">
         <div className="col-span-8 md:col-span-4">
@@ -47,6 +47,12 @@ function Index() {
             </button>
           </div>
         </div>
+        <nav className="md:hidden col-span-12 flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px]">
+          <span className="text-ink border-b border-ink">HOME</span>
+          <Link to="/agents" className="text-ink-dim hover:text-accent transition-colors">OPERATORS</Link>
+          <Link to="/workspace" className="text-ink-dim hover:text-accent transition-colors">WORKSPACE</Link>
+          <Link to="/dashboard" className="text-ink-dim hover:text-accent transition-colors">DASHBOARD</Link>
+        </nav>
         <div className="hidden md:flex col-span-6 md:col-span-4 items-start justify-center gap-6">
           <span className="text-ink border-b border-ink">HOME</span>
           <Link to="/agents" className="text-ink-dim hover:text-accent transition-colors">OPERATORS</Link>
