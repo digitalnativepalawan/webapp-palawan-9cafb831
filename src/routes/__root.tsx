@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-router";
 
 import { useContent } from "@/store/content";
+import { loadSiteContent } from "@/lib/content.functions";
 import appCss from "../styles.css?url";
 import PreviewHealth from "@/components/PreviewHealth";
 
@@ -71,6 +72,14 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
+  loader: async () => {
+    try {
+      const res = await loadSiteContent();
+      return { siteContent: res.json ?? null };
+    } catch {
+      return { siteContent: null };
+    }
+  },
   head: () => ({
     meta: [
       { charSet: "utf-8" },
@@ -120,12 +129,37 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-  const load = useContent((s) => s.load);
+  const { siteContent } = Route.useLoaderData();
   const setTheme = useContent((s) => s.setTheme);
 
-  useEffect(() => {
-    void load();
-  }, [load]);
+  // Hydrate the zustand store synchronously on both server and client before
+  // first paint so every viewport (mobile / tablet / desktop) and every domain
+  // renders the live DB content instead of the seeded defaults.
+  useState(() => {
+    if (!siteContent) return null;
+    const state = useContent.getState();
+    if (state.loaded) return null;
+    try {
+      const parsed = JSON.parse(siteContent);
+      const merged = { ...state.content, ...parsed };
+      const isStale = (u?: string) =>
+        typeof u === "string" && (u.startsWith("/assets/") || u.startsWith("/src/assets/"));
+      const heroImage = isStale(merged.hero?.image) ? state.content.hero.image : merged.hero.image;
+      const blog = (merged.blog ?? []).map((p: any) => {
+        const d = state.content.blog.find((x) => x.id === p.id);
+        return { ...p, image: isStale(p.image) && d ? d.image : p.image };
+      });
+      const portfolio = (merged.portfolio ?? []).map((p: any) => {
+        const d = state.content.portfolio.find((x) => x.id === p.id);
+        return { ...p, image: isStale(p.image) && d ? d.image : p.image };
+      });
+      useContent.setState({
+        content: { ...merged, hero: { ...merged.hero, image: heroImage }, blog, portfolio },
+        loaded: true,
+      });
+    } catch {}
+    return null;
+  });
 
   useEffect(() => {
     try {
