@@ -91,13 +91,6 @@ export type ClientLogo = {
   url: string;
 };
 
-type LegalContentUnused = {
-  privacy: string;
-  terms: string;
-  disclaimer: string;
-  footerSnippet: string;
-};
-
 export type PricingTier = {
   id: string;
   name: string;
