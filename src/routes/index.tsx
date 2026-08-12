@@ -274,6 +274,8 @@ function Index() {
       </section>
 
       {/* Footer */}
+      <ClientLogos />
+
       <footer className="px-6 lg:px-10 pt-12 pb-6 mt-8 border-t border-line">
         <div className="grid grid-cols-12 gap-4 items-center text-[10px] uppercase tracking-[0.14em]">
           <div className="col-span-12 md:col-span-3">
