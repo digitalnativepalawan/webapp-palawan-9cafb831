@@ -168,3 +168,17 @@
   .legal-prose em { color: var(--color-ink-dim); }
   .legal-prose a { color: var(--color-accent); text-decoration: underline; }
 }
+
+/* Client logo strip — keeps dark artwork readable on dark backgrounds */
+.client-logo {
+  opacity: 0.85;
+  transition: opacity 200ms ease, filter 200ms ease, transform 200ms ease;
+}
+.dark .client-logo,
+html:not(.light) .client-logo {
+  filter: brightness(1.85) contrast(1.05) saturate(1.05);
+}
+.group:hover .client-logo {
+  opacity: 1;
+  transform: translateY(-2px);
+}
