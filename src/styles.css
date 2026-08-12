@@ -176,7 +176,7 @@
 }
 .dark .client-logo,
 html:not(.light) .client-logo {
-  filter: brightness(1.85) contrast(1.05) saturate(1.05);
+  filter: brightness(2.6) contrast(1.12) saturate(1.1);
 }
 .group:hover .client-logo {
   opacity: 1;
