@@ -5,6 +5,7 @@ import { useContent, type BlogPost, type PortfolioItem } from "@/store/content";
 import HermesWorkstation from "@/components/HermesWorkstation";
 import { AdminTrigger } from "@/components/AdminPanel";
 import { PortfolioGallery } from "@/components/PortfolioGallery";
+import { ClientLogos } from "@/components/ClientLogos";
 import hero from "@/assets/hero.jpg";
 import mqLogo from "@/assets/mq-logo.png";
 import b1 from "@/assets/blog-1.jpg";
