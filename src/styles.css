@@ -178,6 +178,10 @@
 html:not(.light) .client-logo {
   filter: brightness(2.6) contrast(1.12) saturate(1.1);
 }
+.dark .client-logo-mono,
+html:not(.light) .client-logo-mono {
+  filter: brightness(0) invert(1) opacity(0.92);
+}
 .group:hover .client-logo {
   opacity: 1;
   transform: translateY(-2px);

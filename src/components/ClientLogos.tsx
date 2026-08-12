@@ -19,7 +19,7 @@ export function ClientLogos() {
                   alt={c.name}
                   title={c.name}
                   loading="lazy"
-                  className="client-logo max-h-full max-w-full object-contain"
+                  className={`client-logo${c.monoOnDark ? " client-logo-mono" : ""} max-h-full max-w-full object-contain`}
                 />
               </span>
             );

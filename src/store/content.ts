@@ -89,6 +89,8 @@ export type ClientLogo = {
   name: string;
   logo: string;
   url: string;
+  /** Monochrome artwork: rendered as a white silhouette in dark mode. */
+  monoOnDark?: boolean;
 };
 
 export type PricingTier = {
@@ -344,10 +346,10 @@ const defaults: Content = {
   clientsTitle: "TRUSTED BY",
   clients: [
     { id: "cl1", name: "Jaycee Trading and Services", logo: clientJaycee.url, url: "#" },
-    { id: "cl2", name: "Baia Palawan", logo: clientBaia.url, url: "#" },
-    { id: "cl3", name: "Kapwa Hospitality Group", logo: clientKapwa.url, url: "#" },
+    { id: "cl2", name: "Baia Palawan", logo: clientBaia.url, url: "#", monoOnDark: true },
+    { id: "cl3", name: "Kapwa Hospitality Group", logo: clientKapwa.url, url: "#", monoOnDark: true },
     { id: "cl4", name: "San Vicente Palawan Island Directory", logo: clientSanVicente.url, url: "https://sanvicente.ph" },
-    { id: "cl5", name: "Amuma Barefoot Boutique Resorts", logo: clientAmuma.url, url: "#" },
+    { id: "cl5", name: "Amuma Barefoot Boutique Resorts", logo: clientAmuma.url, url: "#", monoOnDark: true },
   ],
   workProjects: [
     {
