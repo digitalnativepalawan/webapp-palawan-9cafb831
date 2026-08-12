@@ -10,6 +10,11 @@ import p3 from "@/assets/p3.jpg";
 import p4 from "@/assets/p4.jpg";
 import p5 from "@/assets/p5.jpg";
 import p6 from "@/assets/p6.jpg";
+import clientJaycee from "@/assets/clients/jaycee.png.asset.json";
+import clientBaia from "@/assets/clients/baia.png.asset.json";
+import clientKapwa from "@/assets/clients/kapwa.png.asset.json";
+import clientSanVicente from "@/assets/clients/sanvicente.png.asset.json";
+import clientAmuma from "@/assets/clients/amuma.png.asset.json";
 
 export type BlogPost = {
   id: string;
@@ -73,6 +78,20 @@ export type SocialLink = {
 };
 
 export type LegalContent = {
+  privacy: string;
+  terms: string;
+  disclaimer: string;
+  footerSnippet: string;
+};
+
+export type ClientLogo = {
+  id: string;
+  name: string;
+  logo: string;
+  url: string;
+};
+
+type LegalContentUnused = {
   privacy: string;
   terms: string;
   disclaimer: string;
