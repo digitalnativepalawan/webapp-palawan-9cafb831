@@ -172,6 +172,8 @@ export type Content = {
   pricingSubtitle: string;
   pricing: PricingTier[];
   workProjects: WorkProject[];
+  clientsTitle: string;
+  clients: ClientLogo[];
 };
 
 const defaults: Content = {
