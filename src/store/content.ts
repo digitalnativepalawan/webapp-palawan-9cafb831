@@ -339,6 +339,14 @@ const defaults: Content = {
       buttonLink: "#contact-form",
     },
   ],
+  clientsTitle: "TRUSTED BY",
+  clients: [
+    { id: "cl1", name: "Jaycee Trading and Services", logo: clientJaycee.url, url: "#" },
+    { id: "cl2", name: "Baia Palawan", logo: clientBaia.url, url: "#" },
+    { id: "cl3", name: "Kapwa Hospitality Group", logo: clientKapwa.url, url: "#" },
+    { id: "cl4", name: "San Vicente Palawan Island Directory", logo: clientSanVicente.url, url: "https://sanvicente.ph" },
+    { id: "cl5", name: "Amuma Barefoot Boutique Resorts", logo: clientAmuma.url, url: "#" },
+  ],
   workProjects: [
     {
       id: "wp1",
