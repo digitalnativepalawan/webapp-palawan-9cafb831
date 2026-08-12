@@ -1227,10 +1227,6 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
           </div>
         )}
 
-        {tab === "legal" && (
-          <></>
-        )}
-
         {tab === "clients" && (
           <div className="space-y-3">
             <div className="label text-ink-dim">
