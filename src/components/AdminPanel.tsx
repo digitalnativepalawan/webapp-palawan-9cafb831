@@ -1296,6 +1296,19 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
                         upd("clients", (c.clients || []).map((x, j) => (j === i ? { ...x, url: nv } : x)))
                       }
                     />
+                    <label className="label flex items-center gap-2 text-ink-dim">
+                      <input
+                        type="checkbox"
+                        checked={!!cl.monoOnDark}
+                        onChange={(e) =>
+                          upd(
+                            "clients",
+                            (c.clients || []).map((x, j) => (j === i ? { ...x, monoOnDark: e.target.checked } : x)),
+                          )
+                        }
+                      />
+                      WHITE SILHOUETTE IN DARK MODE
+                    </label>
                   </div>
                 </div>
               </div>
