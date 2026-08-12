@@ -409,7 +409,7 @@ function WorkspaceMediaManager({
 export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey: string }) {
   const { content, save, saving, reset } = useContent();
   const [c, setC] = useState<Content>(content);
-  const [tab, setTab] = useState<"header" | "hero" | "blog" | "portfolio" | "workspace" | "footer" | "socials" | "legal" | "pricing">("header");
+  const [tab, setTab] = useState<"header" | "hero" | "blog" | "portfolio" | "workspace" | "footer" | "socials" | "clients" | "legal" | "pricing">("header");
   const [err, setErr] = useState<string | null>(null);
   const [syncing, setSyncing] = useState(false);
   const lastSavedJson = useRef(JSON.stringify(content));
@@ -510,7 +510,7 @@ export function AdminPanel({ onClose, passkey }: { onClose: () => void; passkey:
         {!err && syncing && <div className="label text-ink-dim mb-3">SYNCING TO BACKEND...</div>}
 
         <div className="flex gap-1 mb-4 border-b border-line">
-          {(["header", "hero", "blog", "portfolio", "workspace", "pricing", "footer", "socials", "legal"] as const).map((t) => (
+          {(["header", "hero", "blog", "portfolio", "workspace", "pricing", "footer", "socials", "clients", "legal"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
